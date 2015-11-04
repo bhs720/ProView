@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SettingsFile CurrentProfile="(Default)" GeneratedClassNamespace="ProView.Properties" GeneratedClassName="DataGrid" xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings">
+  <Profiles>
+    <Profile Name="(Default)" />
+  </Profiles>
+  <Settings>
+    <Setting Name="Font" Type="System.Drawing.Font" Scope="User" Roaming="false">
+      <Value Profile="(Default)">Tahoma, 8.25pt</Value>
+    </Setting>
+    <Setting Name="HighlightRowBG" Type="System.Drawing.Color" Scope="User" Roaming="false">
+      <Value Profile="(Default)">LightYellow</Value>
+    </Setting>
+    <Setting Name="HighlightRowFG" Type="System.Drawing.Color" Scope="User" Roaming="false">
+      <Value Profile="(Default)">ControlText</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

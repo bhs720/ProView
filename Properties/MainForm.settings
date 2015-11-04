@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SettingsFile CurrentProfile="(Default)" GeneratedClassNamespace="ProView.Properties" GeneratedClassName="MainForm" xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings">
+  <Profiles>
+    <Profile Name="(Default)" />
+  </Profiles>
+  <Settings>
+    <Setting Name="SplitterDistance" Type="System.Double" Scope="User" Roaming="false">
+      <Value Profile="(Default)">0.5</Value>
+    </Setting>
+    <Setting Name="SplitterOrientation" Type="System.Int32" Scope="User" Roaming="false">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="WindowPosition" Type="System.Drawing.Point" Scope="User" Roaming="false">
+      <Value Profile="(Default)">0, 0</Value>
+    </Setting>
+    <Setting Name="WindowSize" Type="System.Drawing.Size" Scope="User" Roaming="false">
+      <Value Profile="(Default)">1024, 768</Value>
+    </Setting>
+    <Setting Name="WindowState" Type="System.Int32" Scope="User" Roaming="false">
+      <Value Profile="(Default)">2</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
