@@ -154,8 +154,9 @@
     <Reference Include="Microsoft.CSharp">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
-    <Reference Include="MuPDF">
-      <HintPath>MuPDF.NET-v1.8.0.0\MuPDF.dll</HintPath>
+    <Reference Include="MuPDF, Version=1.8.0.0, Culture=neutral, PublicKeyToken=cdf79546fc2bed09, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>MuPDF\bin\Debug\MuPDF.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -263,13 +264,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <Content Include="MuPDF.dll" />
-    <Content Include="MuPDFLib-x64.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="MuPDFLib-x86.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
     <None Include="Properties\DataGrid.settings">
@@ -342,4 +336,9 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy /y "$(ProjectDir)\MuPDF\bin\$(ConfigurationName)\MuPDF.dll" "$(TargetDir)"
+copy /y "$(ProjectDir)\MuPDF\bin\$(ConfigurationName)\MuPDFLib-x64.dll" "$(TargetDir)"
+copy /y "$(ProjectDir)\MuPDF\bin\$(ConfigurationName)\MuPDFLib-x86.dll" "$(TargetDir)"</PostBuildEvent>
+  </PropertyGroup>
 </Project>
