@@ -155,7 +155,7 @@
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
     <Reference Include="MuPDF">
-      <HintPath>..\..\_libs\MuPDF.NET-v1.8.0.0\MuPDF.dll</HintPath>
+      <HintPath>MuPDF.NET-v1.8.0.0\MuPDF.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -263,6 +263,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <Content Include="MuPDF.dll" />
     <Content Include="MuPDFLib-x64.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
