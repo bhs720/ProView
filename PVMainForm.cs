@@ -8,115 +8,118 @@ using System.Linq;
 
 namespace ProView
 {
-	public partial class PVMainForm : Form
-	{
-		public PVMainForm()
-		{
-			InitializeComponent();
-			pvDataViewer.PVImageViewer = this.pvImageViewer;
-			pvDataViewer.PVMainForm = this;
-			pvImageViewer.PVMainForm = this;
-			MouseWheel += pvImageViewer.HandleMouseWheel;
-		}
-		
-		#region MainForm Events
-		void PVMainFormClosing(object sender, FormClosingEventArgs e)
-		{
-			pvDataViewer.MainFormClosing(e);
-			SaveUserSettings();
-		}
-		
-		void PVMainFormLoad(object sender, EventArgs e)
-		{
-			LoadUserSettings();
-			pvDataViewer.MainFormLoad(e);
-		}
-		#endregion
-		
-		#region User Settings
-		
-		void LoadUserSettings()
-		{
-			WindowState = (FormWindowState)Properties.MainForm.Default.WindowState;
-			Size = Properties.MainForm.Default.WindowSize;
-			StartPosition = FormStartPosition.Manual;
-			Location = Properties.MainForm.Default.WindowPosition;
+    public partial class PVMainForm : Form
+    {
+        public PVMainForm()
+        {
+            InitializeComponent();
+            pvDataViewer.PVImageViewer = this.pvImageViewer;
+            pvDataViewer.PVMainForm = this;
+            pvImageViewer.PVMainForm = this;
+            MouseWheel += pvImageViewer.HandleMouseWheel;
+        }
 
-			splitter.Orientation = (Orientation)Properties.MainForm.Default.SplitterOrientation;
-			splitter.SplitterDistance = splitter.Orientation == Orientation.Horizontal ?
-				(int)(Properties.MainForm.Default.SplitterDistance * ClientSize.Height) :
-				(int)(Properties.MainForm.Default.SplitterDistance * ClientSize.Width);
-			
-			PDF.resolution = Properties.ImageViewer.Default.PDFResolution;
-		}
+        #region MainForm Events
+        void PVMainFormClosing(object sender, FormClosingEventArgs e)
+        {
+            pvDataViewer.MainFormClosing(e);
+            SaveUserSettings();
+        }
 
-		void SaveUserSettings()
-		{
-			if (WindowState == FormWindowState.Minimized)
-				WindowState = FormWindowState.Normal;
-			if (WindowState != FormWindowState.Maximized)
-			{
-				Properties.MainForm.Default.WindowSize = Size;
-				Properties.MainForm.Default.WindowPosition = Location;
-			}
-			Properties.MainForm.Default.WindowState = (int)WindowState;
-			Properties.MainForm.Default.SplitterDistance = splitter.Orientation == Orientation.Horizontal ?
-				splitter.SplitterDistance / (double)ClientSize.Height :
-				splitter.SplitterDistance / (double)ClientSize.Width;
-			Properties.MainForm.Default.SplitterOrientation = (int)splitter.Orientation;
-			Properties.MainForm.Default.Save();
-		}
-		#endregion
-		
-		
-		#region Drag and Drop Files
-		void PVMainFormDragEnter(object sender, DragEventArgs e)
-		{
-			e.Effect = e.Data.GetDataPresent(DataFormats.FileDrop) ? DragDropEffects.Copy : DragDropEffects.None;
-		}
-		
-		void PVMainFormDragDrop(object sender, DragEventArgs e)
-		{
-			var dropItems = (string[])e.Data.GetData(DataFormats.FileDrop);
-			var dropFiles = new List<string>();
-			foreach (var dropItem in dropItems)
-			{
-				try
-				{
-					var attr = File.GetAttributes(dropItem);
-					if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
-						dropFiles.AddRange(Directory.EnumerateFiles(dropItem, "*.*", SearchOption.AllDirectories).OrderBy(x => x));
-					else
-						dropFiles.Add(dropItem);
-				}
-				catch (Exception ex)
-				{
-					Debug.WriteLine(ex);
-					var result = MessageBox.Show(dropItem + "\n\n" + ex.Message + "\n\nContinue loading other files?", "Problem", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
-					if (result == DialogResult.OK)
-						continue;
-					return;
-				}
-			}
-			foreach (var dropFile in dropFiles)
-			{
-				PVFile pvFile = null;
-				try
-				{
-					pvFile = PVFile.Load(dropFile);
-					pvDataViewer.AddItem(pvFile);
-				}
-				catch (Exception ex)
-				{
-					var result = MessageBox.Show(dropFile + "\n\n" + ex.Message + "\n\nContinue loading other files?", "Problem", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
-					if (result == DialogResult.OK)
-						continue;
-					return;
-				}
-			}
-		}
-		
-		/*
+        void PVMainFormLoad(object sender, EventArgs e)
+        {
+            LoadUserSettings();
+            pvDataViewer.MainFormLoad(e);
+
+            var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+            this.Text += $" [v{version.Major}.{version.Minor}]";
+        }
+        #endregion
+
+        #region User Settings
+
+        void LoadUserSettings()
+        {
+            WindowState = (FormWindowState)Properties.MainForm.Default.WindowState;
+            Size = Properties.MainForm.Default.WindowSize;
+            StartPosition = FormStartPosition.Manual;
+            Location = Properties.MainForm.Default.WindowPosition;
+
+            splitter.Orientation = (Orientation)Properties.MainForm.Default.SplitterOrientation;
+            splitter.SplitterDistance = splitter.Orientation == Orientation.Horizontal ?
+                (int)(Properties.MainForm.Default.SplitterDistance * ClientSize.Height) :
+                (int)(Properties.MainForm.Default.SplitterDistance * ClientSize.Width);
+
+            PDF.resolution = Properties.ImageViewer.Default.PDFResolution;
+        }
+
+        void SaveUserSettings()
+        {
+            if (WindowState == FormWindowState.Minimized)
+                WindowState = FormWindowState.Normal;
+            if (WindowState != FormWindowState.Maximized)
+            {
+                Properties.MainForm.Default.WindowSize = Size;
+                Properties.MainForm.Default.WindowPosition = Location;
+            }
+            Properties.MainForm.Default.WindowState = (int)WindowState;
+            Properties.MainForm.Default.SplitterDistance = splitter.Orientation == Orientation.Horizontal ?
+                splitter.SplitterDistance / (double)ClientSize.Height :
+                splitter.SplitterDistance / (double)ClientSize.Width;
+            Properties.MainForm.Default.SplitterOrientation = (int)splitter.Orientation;
+            Properties.MainForm.Default.Save();
+        }
+        #endregion
+
+
+        #region Drag and Drop Files
+        void PVMainFormDragEnter(object sender, DragEventArgs e)
+        {
+            e.Effect = e.Data.GetDataPresent(DataFormats.FileDrop) ? DragDropEffects.Copy : DragDropEffects.None;
+        }
+
+        void PVMainFormDragDrop(object sender, DragEventArgs e)
+        {
+            var dropItems = (string[])e.Data.GetData(DataFormats.FileDrop);
+            var dropFiles = new List<string>();
+            foreach (var dropItem in dropItems)
+            {
+                try
+                {
+                    var attr = File.GetAttributes(dropItem);
+                    if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+                        dropFiles.AddRange(Directory.EnumerateFiles(dropItem, "*.*", SearchOption.AllDirectories).OrderBy(x => x));
+                    else
+                        dropFiles.Add(dropItem);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                    var result = MessageBox.Show(dropItem + "\n\n" + ex.Message + "\n\nContinue loading other files?", "Problem", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
+                    if (result == DialogResult.OK)
+                        continue;
+                    return;
+                }
+            }
+            foreach (var dropFile in dropFiles)
+            {
+                PVFile pvFile = null;
+                try
+                {
+                    pvFile = PVFile.Load(dropFile);
+                    pvDataViewer.AddItem(pvFile);
+                }
+                catch (Exception ex)
+                {
+                    var result = MessageBox.Show(dropFile + "\n\n" + ex.Message + "\n\nContinue loading other files?", "Problem", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
+                    if (result == DialogResult.OK)
+                        continue;
+                    return;
+                }
+            }
+        }
+
+        /*
 		void MainForm2DragEnter(object sender, DragEventArgs e)
 		{
 			e.Effect = e.Data.GetDataPresent(DataFormats.FileDrop) ? DragDropEffects.Copy : DragDropEffects.None;
@@ -232,69 +235,69 @@ namespace ProView
 			e.Result = files;
 		}
 		 */
-		#endregion
-		
-		#region Keyboard shortcuts
-		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
-		{
-			switch (keyData)
-			{
-				case Keys.Control | Keys.F:
-					pvImageViewer.ZoomToFit();
-					return true;
-				case Keys.Control | Keys.R:
-					pvDataViewer.RenameFiles();
-					return true;
-				case Keys.PageDown:
-					pvImageViewer.SetPageNext();
-					return true;
-				case Keys.PageUp:
-					pvImageViewer.SetPagePrev();
-					return true;
-				case Keys.F1:
-					using (var settingsDialog = new PVSettingsDialog())
-					{
-						settingsDialog.PVDataViewer = pvDataViewer;
-						settingsDialog.ShowDialog(this);
-					}
-					return true;
-				default:
-					return base.ProcessCmdKey(ref msg, keyData);
-			}
-		}
-		#endregion
-		
-		#region Splitter Context Menu
-		void ctxSplitterVertClick(object sender, EventArgs e)
-		{
-			if (splitter.Orientation != Orientation.Vertical)
-			{
-				double factor = splitter.SplitterDistance / (double)ClientSize.Height;
-				splitter.Orientation = Orientation.Vertical;
-				splitter.SplitterDistance = (int)(ClientSize.Width * factor);
-			}
-		}
+        #endregion
 
-		void ctxSplitterHorizClick(object sender, EventArgs e)
-		{
-			if (splitter.Orientation != Orientation.Horizontal)
-			{
-				double factor = splitter.SplitterDistance / (double)ClientSize.Width;
-				splitter.Orientation = Orientation.Horizontal;
-				splitter.SplitterDistance = (int)(ClientSize.Height * factor);
-			}
-		}
+        #region Keyboard shortcuts
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            switch (keyData)
+            {
+                case Keys.Control | Keys.F:
+                    pvImageViewer.ZoomToFit();
+                    return true;
+                case Keys.Control | Keys.R:
+                    pvDataViewer.RenameFiles();
+                    return true;
+                case Keys.PageDown:
+                    pvImageViewer.SetPageNext();
+                    return true;
+                case Keys.PageUp:
+                    pvImageViewer.SetPagePrev();
+                    return true;
+                case Keys.F1:
+                    using (var settingsDialog = new PVSettingsDialog())
+                    {
+                        settingsDialog.PVDataViewer = pvDataViewer;
+                        settingsDialog.ShowDialog(this);
+                    }
+                    return true;
+                default:
+                    return base.ProcessCmdKey(ref msg, keyData);
+            }
+        }
+        #endregion
 
-		void splitterMouseDown(object sender, MouseEventArgs e)
-		{
-			if (e.Button == MouseButtons.Right)
-			{
-				ctxSplitterHoriz.Checked = splitter.Orientation == Orientation.Horizontal;
-				ctxSplitterVert.Checked = splitter.Orientation == Orientation.Vertical;
-				ctxSplitter.Show(Cursor.Position);
-			}
-		}
-		
-		#endregion
-	}
+        #region Splitter Context Menu
+        void ctxSplitterVertClick(object sender, EventArgs e)
+        {
+            if (splitter.Orientation != Orientation.Vertical)
+            {
+                double factor = splitter.SplitterDistance / (double)ClientSize.Height;
+                splitter.Orientation = Orientation.Vertical;
+                splitter.SplitterDistance = (int)(ClientSize.Width * factor);
+            }
+        }
+
+        void ctxSplitterHorizClick(object sender, EventArgs e)
+        {
+            if (splitter.Orientation != Orientation.Horizontal)
+            {
+                double factor = splitter.SplitterDistance / (double)ClientSize.Width;
+                splitter.Orientation = Orientation.Horizontal;
+                splitter.SplitterDistance = (int)(ClientSize.Height * factor);
+            }
+        }
+
+        void splitterMouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                ctxSplitterHoriz.Checked = splitter.Orientation == Orientation.Horizontal;
+                ctxSplitterVert.Checked = splitter.Orientation == Orientation.Vertical;
+                ctxSplitter.Show(Cursor.Position);
+            }
+        }
+
+        #endregion
+    }
 }
