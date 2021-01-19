@@ -9,35 +9,44 @@ namespace ProView
 {
     public static class JobManager
     {
-        static readonly string jobStoreFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),"ProView", "Jobs");
+        private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+
+        static readonly string jobStoreFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "ProView", "Jobs");
         static readonly string jobFileExtension = ".xml";
+
         static JobManager()
         {
             try
             {
-                if (!Directory.Exists(jobStoreFolder))
-                    Directory.CreateDirectory(jobStoreFolder);
+                Directory.CreateDirectory(jobStoreFolder);
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Problem with Job Manager", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Logger.Error(ex, "Failed to create folder: {@jobStoreFolder}", jobStoreFolder);
+                MessageBox.Show($"An error occurred while attempting to create the folder:{Environment.NewLine}{Environment.NewLine}{jobStoreFolder}{Environment.NewLine}{Environment.NewLine}{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         public static List<string> GetStoredJobs()
         {
             var jobNames = new List<string>();
             try
             {
                 foreach (var file in Directory.EnumerateFiles(jobStoreFolder))
+                {
                     jobNames.Add(Path.GetFileNameWithoutExtension(file));
+                }
+                    
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Problem getting stored jobs", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Logger.Error(ex, "Failed to enumerate files in {@jobStoreFolder}", jobStoreFolder);
+                MessageBox.Show($"An error occurred while attempting to find files in:{Environment.NewLine}{Environment.NewLine}{jobStoreFolder}{Environment.NewLine}{Environment.NewLine}{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             return jobNames;
         }
+
         public static List<Field> LoadJob(string jobName)
         {
             List<Field> fields = null;
@@ -52,10 +61,12 @@ namespace ProView
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Problem loading job", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Logger.Error(ex, "Failed to deserialize \"{@jobStoreFolder}\\{@jobName}.{@jobFileExtension}\"", jobStoreFolder, jobName, jobFileExtension);
+                MessageBox.Show($"An error occurred while attempting to load the job \"{jobName}\"{Environment.NewLine}{Environment.NewLine}{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             return fields;
         }
+
         public static void SaveJob(string jobName, List<Field> fields)
         {
             try
@@ -69,9 +80,11 @@ namespace ProView
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Problem saving job", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Logger.Error(ex, "Failed to serialize \"{@jobStoreFolder}\\{@jobName}.{@jobFileExtension}\"", jobStoreFolder, jobName, jobFileExtension);
+                MessageBox.Show($"An error occurred while attempting to save the job \"{jobName}\"{Environment.NewLine}{Environment.NewLine}{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         public static void DeleteJob(string jobName)
         {
             try
@@ -81,9 +94,11 @@ namespace ProView
             }
             catch (Exception ex)
             {
+                Logger.Error(ex, "Failed to delete file \"{@jobStoreFolder}\\{@jobName}.{@jobFileExtension}\"", jobStoreFolder, jobName, jobFileExtension);
                 MessageBox.Show(ex.Message, "Problem deleting job", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         public static void ImportFile(string srcFile)
         {
             try
@@ -93,9 +108,11 @@ namespace ProView
             }
             catch (Exception ex)
             {
+                Logger.Error(ex, "Failed to copy file from \"{@srcFile}\" to \"{@jobStoreFolder}\"", srcFile, jobStoreFolder);
                 MessageBox.Show(ex.Message, "Problem importing job file", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         public static void ExportFile(string jobName, string dstFile)
         {
             try
@@ -105,6 +122,7 @@ namespace ProView
             }
             catch (Exception ex)
             {
+                Logger.Error(ex, "Failed to copy file from \"{@jobStoreFolder}\\{@jobName}.{@jobFileExtension}\" to \"{@dstFile}\"", jobStoreFolder, jobName, jobFileExtension, dstFile);
                 MessageBox.Show(ex.Message, "Problem exporting job file", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
