@@ -9,6 +9,8 @@ namespace ProView
 {
     public partial class PVImageViewer : Panel
     {
+        private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+
         readonly ViewPort viewPort = new ViewPort();
         readonly Resample resample = new Resample();
         readonly Bitmap bmpScreen = InitScreenBuffer();
@@ -171,22 +173,24 @@ namespace ProView
             SetPage(currentPage - 1);
         }
 
-        public void SetPage(int page)
+        public void SetPage(int pageNumber)
         {
-            if (pvFile != null && page <= pvFile.PageCount && page > 0)
+            if (pvFile != null && pageNumber <= pvFile.PageCount && pageNumber > 0)
             {
                 try
                 {
                     PVMainForm.Cursor = Cursors.WaitCursor;
 
-                    bmpSource = pvFile.LoadPage(page);
-                    currentPage = page;
+                    bmpSource = pvFile.LoadPage(pageNumber);
+                    currentPage = pageNumber;
                     resample.Source = bmpSource;
                     PageChanged.Invoke(this, new PageChangedEventArgs(bmpSource.Size, currentPage, bmpSource.PixelFormat));
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"An error occurred while attempting to load page {page} of file:{Environment.NewLine}{Environment.NewLine}{pvFile.FileName}{Environment.NewLine}{Environment.NewLine}{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Logger.Error(ex, "pageNumber={@pageNumber} pvFile={@pvFile}", pageNumber, pvFile);
+
+                    MessageBox.Show($"An error occurred while attempting to load page {pageNumber} of file:{Environment.NewLine}{Environment.NewLine}{pvFile.FileName}{Environment.NewLine}{Environment.NewLine}{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                     if (pvFile != null)
                     {
