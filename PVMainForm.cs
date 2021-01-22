@@ -266,16 +266,13 @@ namespace ProView
                     pvImageViewer.SetPagePrev();
                     return true;
                 case Keys.F1:
-                    using (var settingsDialog = new PVSettingsDialog())
-                    {
-                        settingsDialog.PVDataViewer = pvDataViewer;
-                        settingsDialog.ShowDialog(this);
-                    }
+                    ShowSettingsDialog();
                     return true;
                 default:
                     return base.ProcessCmdKey(ref msg, keyData);
             }
         }
+
         #endregion
 
         #region Splitter Context Menu
@@ -310,5 +307,31 @@ namespace ProView
         }
 
         #endregion
+
+        private void mnuMainEditSettings_Click(object sender, EventArgs e)
+        {
+            ShowSettingsDialog();
+        }
+
+        private void ShowSettingsDialog()
+        {
+            using (var settingsDialog = new PVSettingsDialog())
+            {
+                settingsDialog.PVDataViewer = pvDataViewer;
+                settingsDialog.ShowDialog(this);
+            }
+        }
+
+        private void mnuMainHelpWebsite_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                System.Diagnostics.Process.Start(Properties.Resources.GitHubReleasesURL);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred while attempting to launch the help website.{Environment.NewLine}{Environment.NewLine}{ex.Message}", "Help Website Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }
