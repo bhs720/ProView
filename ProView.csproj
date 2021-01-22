@@ -211,14 +211,17 @@
     <Compile Include="Properties\DataGrid.Designer.cs">
       <DependentUpon>DataGrid.settings</DependentUpon>
       <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Properties\ImageViewer.Designer.cs">
       <DependentUpon>ImageViewer.settings</DependentUpon>
       <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Properties\MainForm.Designer.cs">
       <DependentUpon>MainForm.settings</DependentUpon>
       <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Settings\PVSettingsDialog.cs">
       <SubType>Form</SubType>

@@ -40,6 +40,17 @@ namespace ProView
 
         void LoadUserSettings()
         {
+            if (Properties.MainForm.Default.UpdateSettings)
+            {
+                Properties.MainForm.Default.Upgrade();
+                Properties.MainForm.Default.UpdateSettings = false;
+                Properties.MainForm.Default.Save();
+                Properties.ImageViewer.Default.Upgrade();
+                Properties.ImageViewer.Default.Save();
+                Properties.DataGrid.Default.Upgrade();
+                Properties.DataGrid.Default.Save();
+            }
+
             WindowState = (FormWindowState)Properties.MainForm.Default.WindowState;
             Size = Properties.MainForm.Default.WindowSize;
             StartPosition = FormStartPosition.Manual;
