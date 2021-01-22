@@ -188,7 +188,7 @@ namespace ProView
                 }
                 catch (Exception ex)
                 {
-                    Logger.Error(ex, "pageNumber={@pageNumber} pvFile={@pvFile}", pageNumber, pvFile);
+                    Logger.Error(ex, "pageNumber={@pageNumber} pvFile={@pvFile}", pageNumber, pvFile, PDF.resolution);
 
                     MessageBox.Show($"An error occurred while attempting to load page {pageNumber} of file:{Environment.NewLine}{Environment.NewLine}{pvFile.FileName}{Environment.NewLine}{Environment.NewLine}{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 

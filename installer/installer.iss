@@ -25,6 +25,7 @@ OutputBaseFilename={#MyAppName}Setup{#MyAppVersion}
 SetupIconFile=C:\Users\bsmith\Google Drive\Dev\ProView\ProViewIcon.ico
 Compression=lzma
 SolidCompression=yes
+UninstallDisplayIcon={app}\ProViewIcon.ico
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -46,6 +47,7 @@ Source: "C:\Users\bsmith\Google Drive\Dev\ProView\bin\Release\NLog.config"; Dest
 Source: "C:\Users\bsmith\Google Drive\Dev\ProView\bin\Release\NLog.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\bsmith\Google Drive\Dev\ProView\bin\Release\NLog.xml"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\bsmith\Google Drive\Dev\ProView\bin\Release\ProView.exe.config"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\ProViewIcon.ico"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

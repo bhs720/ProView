@@ -247,6 +247,8 @@ namespace ProView
     {
         public static int resolution = 96;
 
+        private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+
         public PDF(string fileName) : base(fileName)
         {
             int retry = 0;
@@ -274,7 +276,7 @@ namespace ProView
                 }
                 catch
                 {
-                    if (retry < 10)
+                    if (retry < 3)
                     {
                         retry++;
                         System.Threading.Thread.Sleep(250);
@@ -300,6 +302,11 @@ namespace ProView
 
             while (true)
             {
+                int zoomWidth = 0;
+                int zoomHeight = 0;
+                double pdfWidth = 0;
+                double pdfHeight = 0;
+
                 try
                 {
                     using (var pdf = new MuPDF(fileName, ""))
@@ -312,12 +319,15 @@ namespace ProView
                         pdf.Page = pageNumber;
                         pdf.AntiAlias = true;
 
-                        int width = (int)(pdf.Width * resolution / 72.0F);
-                        int height = (int)(pdf.Height * resolution / 72.0F);
+                        pdfWidth = pdf.Width;
+                        pdfHeight = pdf.Height;
+
+                        zoomWidth = checked((int)(pdfWidth * resolution / 72.0F));
+                        zoomHeight = checked((int)(pdfHeight * resolution / 72.0F));
 
                         try
                         {
-                            bmp = pdf.GetBitmap(width, height, 72, 72, 0, RenderType.RGB, false, false, 0);
+                            bmp = pdf.GetBitmap(zoomWidth, zoomHeight, 72, 72, 0, RenderType.RGB, false, false, 0);
                             return bmp;
                         }
                         catch (AccessViolationException ex)
@@ -326,9 +336,9 @@ namespace ProView
                         }
                     }
                 }
-                catch
+                catch (Exception ex)
                 {
-                    if (retry < 10)
+                    if (retry < 3)
                     {
                         retry++;
                         System.Threading.Thread.Sleep(250);
@@ -336,6 +346,7 @@ namespace ProView
                     }
                     else
                     {
+                        Logger.Error(ex, "pdfWidth={@pdfWidth} pdfHeight={@pdfHeight} resolution={@resolution} zoomWidth={@width} zoomHeight={@height}", pdfWidth, pdfHeight, resolution, zoomWidth, zoomHeight);
                         throw;
                     }
                 }
