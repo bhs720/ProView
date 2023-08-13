@@ -13,8 +13,8 @@ namespace ProView
 {
 	public partial class PVDataViewer : DataGridView
 	{
-		public PVImageViewer PVImageViewer { get; set; }
-		public PVMainForm PVMainForm { get; set; }
+		//public PVImageViewer PVImageViewer { get; set; }
+		public MainForm PVMainForm { get; set; }
 		
 		#region Constructor
 		public PVDataViewer()
@@ -30,7 +30,7 @@ namespace ProView
 		#region User preferences
 		public void LoadUserSettings()
 		{
-			DefaultCellStyle.Font = Properties.DataGrid.Default.Font;
+			//DefaultCellStyle.Font = Properties.DataGrid.Default.Font;
 		}
 		#endregion
 		
@@ -94,61 +94,61 @@ namespace ProView
 		
 		void ExportDataGrid()
 		{
-			var result = exportDialog.ShowDialog(PVMainForm);
-			if (result != DialogResult.OK)
-				return;
-			try
-			{
-                using (var writer = new CsvWriter(File.AppendText(exportDialog.FileName)))
-                {
-                    writer.Configuration.Encoding = System.Text.Encoding.UTF8;
-                    //writer.Configuration.Delimiter = "|";
-                    //writer.Configuration.QuoteNoFields = true;
-                    foreach (DataGridViewRow row in Rows)
-                    {
-                        foreach (DataGridViewCell cell in row.Cells)
-                        {
-                            writer.WriteField(cell.Value as string);
-                        }
-                        writer.NextRecord();
-                    }
-                }
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(ex.Message, "Problem writing CSV file", MessageBoxButtons.OK, MessageBoxIcon.Error);
-				return;
-			}
-			result = MessageBox.Show("Successfully wrote CSV file.\n\nOpen the file now?", "Success", MessageBoxButtons.YesNo, MessageBoxIcon.Asterisk);
-			if (result == DialogResult.Yes)
-				Process.Start(exportDialog.FileName);
+			//var result = exportDialog.ShowDialog(PVMainForm);
+			//if (result != DialogResult.OK)
+			//	return;
+			//try
+			//{
+   //             using (var writer = new CsvWriter(File.AppendText(exportDialog.FileName)))
+   //             {
+   //                 writer.Configuration.Encoding = System.Text.Encoding.UTF8;
+   //                 //writer.Configuration.Delimiter = "|";
+   //                 //writer.Configuration.QuoteNoFields = true;
+   //                 foreach (DataGridViewRow row in Rows)
+   //                 {
+   //                     foreach (DataGridViewCell cell in row.Cells)
+   //                     {
+   //                         writer.WriteField(cell.Value as string);
+   //                     }
+   //                     writer.NextRecord();
+   //                 }
+   //             }
+			//}
+			//catch (Exception ex)
+			//{
+			//	MessageBox.Show(ex.Message, "Problem writing CSV file", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			//	return;
+			//}
+			//result = MessageBox.Show("Successfully wrote CSV file.\n\nOpen the file now?", "Success", MessageBoxButtons.YesNo, MessageBoxIcon.Asterisk);
+			//if (result == DialogResult.Yes)
+			//	Process.Start(exportDialog.FileName);
 		}
 		
 		public void LoadCsvDataSource(string csvFile)
 		{
-			foreach (DataGridViewColumn col in Columns)
-			{
-				Columns.Remove(col);
-			}
+			//foreach (DataGridViewColumn col in Columns)
+			//{
+			//	Columns.Remove(col);
+			//}
 			
-			try
-			{
-				var folder = Path.GetDirectoryName(csvFile);
-				var fileName = Path.GetFileName(csvFile);
-				var connection = new OdbcConnection(@"Driver={Microsoft Text Driver (*.txt; *.csv)};DBQ=" + @folder);
-				var adapter = new OdbcDataAdapter("SELECT * FROM [" + fileName + "]", connection);
-				var dataTable = new DataTable();
-				adapter.Fill(dataTable);
-				DataSource = dataTable;
+			//try
+			//{
+			//	var folder = Path.GetDirectoryName(csvFile);
+			//	var fileName = Path.GetFileName(csvFile);
+			//	var connection = new OdbcConnection(@"Driver={Microsoft Text Driver (*.txt; *.csv)};DBQ=" + @folder);
+			//	var adapter = new OdbcDataAdapter("SELECT * FROM [" + fileName + "]", connection);
+			//	var dataTable = new DataTable();
+			//	adapter.Fill(dataTable);
+			//	DataSource = dataTable;
 				
-				adapter.Dispose();
-				connection.Close();
-				connection.Dispose();
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(ex.Message, "Problem connecting to data source", MessageBoxButtons.OK, MessageBoxIcon.Error);
-			}
+			//	adapter.Dispose();
+			//	connection.Close();
+			//	connection.Dispose();
+			//}
+			//catch (Exception ex)
+			//{
+			//	MessageBox.Show(ex.Message, "Problem connecting to data source", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			//}
 			
 		}
 		
@@ -230,12 +230,12 @@ namespace ProView
 				}
 				if (value == null)
 				{
-					PVImageViewer.SetFile(null);
+					//PVImageViewer.SetFile(null);
 					loadedRow = null;
 				}
 				else
 				{
-					PVImageViewer.SetFile(value.Tag as PVFile);
+					//PVImageViewer.SetFile(value.Tag as PVFile);
 					loadedRow = value;
 					loadedRow.DefaultCellStyle.BackColor = Properties.DataGrid.Default.HighlightRowBG;
 					loadedRow.DefaultCellStyle.ForeColor = Properties.DataGrid.Default.HighlightRowFG;

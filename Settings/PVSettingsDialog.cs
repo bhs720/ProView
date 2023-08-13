@@ -53,11 +53,11 @@ namespace ProView
 		
 		void PVSettingsDialogLoad(object sender, EventArgs e)
 		{
-			lblResult.Font = Properties.DataGrid.Default.Font;
-			lblResult.BackColor = Properties.DataGrid.Default.HighlightRowBG;
-			lblResult.ForeColor = Properties.DataGrid.Default.HighlightRowFG;
-			txtPDFResolution.Text = Properties.ImageViewer.Default.PDFResolution.ToString();
-			EnumerateSavedJobs();
+			//lblResult.Font = Properties.DataGrid.Default.Font;
+			//lblResult.BackColor = Properties.DataGrid.Default.HighlightRowBG;
+			//lblResult.ForeColor = Properties.DataGrid.Default.HighlightRowFG;
+			//txtPDFResolution.Text = Properties.ImageViewer.Default.PDFResolution.ToString();
+			//EnumerateSavedJobs();
 		}
 		
 		void PVSettingsDialogFormClosed(object sender, FormClosedEventArgs e)
@@ -84,7 +84,7 @@ namespace ProView
 				}
 				else
 				{
-					PDF.resolution = value;
+					//PDF.resolution = value;
 					Properties.ImageViewer.Default.PDFResolution = value;
 					Properties.ImageViewer.Default.Save();
 				}

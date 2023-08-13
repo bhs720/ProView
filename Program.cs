@@ -11,7 +11,7 @@ namespace ProView
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            Application.Run(new PVMainForm());
+            Application.Run(new MainForm());
         }
 
     }
