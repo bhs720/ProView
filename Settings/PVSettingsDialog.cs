@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace ProView
 {
-	public partial class PVSettingsDialog : Form
+	internal partial class PVSettingsDialog : Form
 	{
 		#region Constructor
 
@@ -94,7 +94,7 @@ namespace ProView
 		
 		#region DataGrid
 		
-		public PVDataViewer PVDataViewer { get; set; }
+		public PVDataGrid PVDataViewer { get; set; }
 		
 		void BtnFontClick(object sender, EventArgs e)
 		{

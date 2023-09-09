@@ -8,14 +8,14 @@ namespace ProView
 	/// <summary>
 	/// Customize file renaming pattern
 	/// </summary>
-	public partial class RenameDialog : Form
+	internal partial class RenameDialog : Form
 	{	
 		public RenameDialog()
 		{
 			InitializeComponent();
 		}
 		
-		public RenameDialog(PVDataViewer pvDataViewer)
+		public RenameDialog(PVDataGrid pvDataViewer)
 		{
 			InitializeComponent();
 			
